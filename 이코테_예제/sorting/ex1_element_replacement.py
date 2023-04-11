@@ -1,22 +1,18 @@
-def quick_sort(array):
-    if len(array) <= 1 : return array
-    pivot = array[0]
-    tail = array[1::]
-
-    left_side = [x for x in tail if x <=pivot]
-    right_side = [x for x in tail if x > pivot]
-    return quick_sort(left_side) + [pivot]+ quick_sort(right_side)
-  
+# n<=100,000 이므로 O(nlogn)시간 복잡도여야 함. 
 n , k = map(int,input().split())
 
 array_a = list(map(int,input().split()))
 array_b = list(map(int,input().split()))
 
-a = quick_sort(array_a)
-b = quick_sort(array_b)
+array_a.sort()  #a는 오름차순
+array_b.sort(reverse = True)    #b는 내림차순 
 
 for i in range(k):
-    a[i],b[-(i+1)] = b[-(i+1)],a[i]
+    #a원소가 b원소보다 작은 경우 스와프
+    if array_a[i] < array_b[i]:
+        array_a[i],array_b[i] = array_b[i], array_a[i]
+    else : 
+        break
 
-print(sum(a))
+print(sum(array_a))
   
