@@ -1,6 +1,6 @@
 import heapq
 
-#오른차순 힙 정렬 
+#내림차순 힙 정렬 
 def heap_sort(iterable):
     h = []
     result = []
