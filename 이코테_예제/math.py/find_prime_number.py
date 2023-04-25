@@ -7,7 +7,7 @@ def is_prime_number(x) :
         #x가 해당 수로 나누어 떨어진다면 소수 아님
         if x % i == 0 :
             return False
-        else : return True
+    return True
 
 print(is_prime_number(4))
 print(is_prime_number(7))
