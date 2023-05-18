@@ -12,4 +12,4 @@ for tc in range(1,t+1):
                    num += arr[i][j]
             if num > max_num: max_num = num
 
-    print(f'#{tc} {max_num}')
+    print("#%d %d" %(tc, max_num))
