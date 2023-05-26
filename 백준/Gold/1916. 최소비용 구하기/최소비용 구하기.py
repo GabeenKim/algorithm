@@ -1,41 +1,40 @@
-# 음인 간선이 없으므로 다익스트라 사용
-import heapq
 import sys
+import heapq
 input = sys.stdin.readline
 INF = int(1e9)
 
+n = int(input())
+m = int(input())
+# 모든 간선 벙조를 입력 받기 위한 연결 노드 정보 리스트 graph, 최단 거리 테이블 dist
+graph = [[] for _ in range(n+1)]
+dist = [INF] * ( n+1 )
+
+for _ in range(m):
+  dep, arr, cost = map(int,input().split())
+  graph[dep].append((arr,cost))
+
+start, end = map(int,input().split())
+
 def dijkstra(start):
-  q = []
+  q= []
+  # (최단거리,노드번호)
   heapq.heappush(q,(0,start))
   dist[start] = 0
 
-  while q:
+  while q : 
     distance, now = heapq.heappop(q)
-    if dist[now] < distance:
-      continue
-    for i in edges[now]:
-      cost = distance + i[1]
+    #현재노드의 최단거리 테이블 속 정보보다 현재 거리 값이 더 크면 continue -> 갱신 전 값이 더 작다면 이미 처리된 노드임. 
+    if dist[now] < distance : continue
+    # 현재 노드와 연결된 다른 인접 노드들 확인
+    for nn, nc in graph[now]:
+      cost = distance + nc
+      if dist[nn] > cost :
+        dist[nn] = cost
+        heapq.heappush(q,(cost,nn))
 
-      if cost < dist[i[0]]:
-        dist[i[0]] = cost
-        heapq.heappush(q,(cost,i[0]))
-  
+dijkstra(start)
 
-n = int(input())
-m = int(input())
-edges = [[] for i in range(n+1)]
-
-for i in range(m):
-  depart, arrival, cost = map(int,input().split())
-  edges[depart].append((arrival, cost))
-
-get_de,get_arr = map(int,input().split())
-
-dist = [INF]*(n+1)
-
-dijkstra(get_de) 
-
-if dist[get_arr] ==INF :
-    print("-1")
+if dist[end] == INF :
+  print("INFINITY")
 else : 
-    print(dist[get_arr])
+  print(dist[end])
