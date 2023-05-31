@@ -1,4 +1,7 @@
 #복습 필 
+import sys
+input = sys.stdin.readline
+
 n = int(input())
 board = [list(input()) for _ in range(n)]
 ans = 0
