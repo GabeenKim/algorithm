@@ -22,6 +22,7 @@ def kmp(word, pattern):
 
     if word[i] == pattern[j]:
       if j == len(pattern)-1:
+        j = pi[j]
         return 1
       else : 
         j+=1
