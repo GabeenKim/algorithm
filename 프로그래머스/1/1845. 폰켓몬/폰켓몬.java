@@ -1,14 +1,14 @@
-import java.util.HashMap;
+import java.util.HashSet;
 class Solution {
     public int solution(int[] nums) {
         int answer = 0;
-        HashMap<Integer,Integer> map = new HashMap<>();
+        HashSet<Integer> hs = new HashSet<>();
         
         for(int n : nums){
-            map.put(n,map.getOrDefault(n,0)+1);
+           hs.add(n);
         }
-        if(map.size()<nums.length/2){
-            answer = map.size();
+        if(hs.size()<nums.length/2){
+            answer = hs.size();
         }
         else {
             answer = nums.length/2;
