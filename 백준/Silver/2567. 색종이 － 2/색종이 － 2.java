@@ -1,45 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st =new StringTokenizer(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		//배열좌표는 1부터 입력되니까 0~100말고 1~101 => 100이라는 좌표가 나올 수 있으니
-		int[][] arr = new int[101][101];
-
-		int num = Integer.parseInt(st.nextToken());
-		for(int n = 0; n<num; n++) {
+		int N = Integer.parseInt(st.nextToken());
+		int[][] arr = new int[102][102];
+		
+		for(int n=0; n<N; n++) {
 			st = new StringTokenizer(br.readLine()," ");
 			int si = Integer.parseInt(st.nextToken());
 			int sj = Integer.parseInt(st.nextToken());
+			
+			//입력 받은 영역을 1로 채우기 
+			for(int i=si; i<si+10;i++) {
+				for(int j=sj; j<sj+10; j++) {
+					arr[i][j]=1;
+				}
+			}
+			
+		}
 		
-			for(int i=si; i<si+10; i++) {
-				for (int j =sj; j<sj+10 ; j++) {
-					if (arr[i][j] == 0) 
-						arr[i][j] = 1;
+		int ans = 0;
+		int[] di = {-1,1,0,0};
+		int[] dj = {0,0,-1,1};
+		//4방향을 확인하고, 현재가 1일 때 다른 방향이 0이면 그 부분이 둘레임을 이용
+		for(int i=1;i<=100;i++) {
+			for(int j=1;j<=100;j++) {
+				if(arr[i][j]==1) {
+					for(int k=0;k<4;k++) {
+						int ni = i+ di[k];
+						int nj = j + dj[k];
+						
+						if(arr[ni][nj]==0) ans++;
+					}
 				}
 			}
 		}
-
-		int cnt = 0;
-		for(int i=1;i<101;i++) {
-			for(int j=1;j<101;j++) {
-				if (arr[i][j] ==1 ) {
-					if(arr[i-1][j]==0) cnt++;
-					if(arr[i+1][j]==0) cnt++;
-					if(arr[i][j-1]==0) cnt++;
-					if(arr[i][j+1]==0) cnt++;
-				}
-			}
-		}
-		System.out.println(cnt);
-
+		System.out.println(ans);
+		
 	}
-
 }
