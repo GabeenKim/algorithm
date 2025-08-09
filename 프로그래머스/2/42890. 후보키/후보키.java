@@ -1,56 +1,61 @@
 import java.util.*;
 class Solution {
-    static int answer;
-    static int n,m;
-    static List<HashSet<Integer>> candidateKey;
-    static String[][] relationCopy;
+    static int row,col;
+    static List<HashSet<Integer>> candidateKeys = new ArrayList<>();
+    static String[][] relation;
+    
     public int solution(String[][] relation) {
-        answer = 0;
-        relationCopy = relation;
+        this.relation = relation;
+        this.row = relation.length;
+        this.col = relation[0].length;
         
-        candidateKey = new ArrayList<>();
-        n = relation.length;
-        m = relation[0].length;
-        
-        for(int i=1;i<m+1;i++){
-            combination(0,i,0,new HashSet<>());
+        //1개의 컬럼부터 모든 컬럼가지의 조합 시도
+        for(int i=1; i<=col; i++){
+            combination(0,i,new HashSet<>());
         }
-        return answer;
+        return candidateKeys.size();
     }
     
-    public void combination(int idx, int size, int depth, HashSet<Integer> set){
-        //조합이 생성되면 
-        if(depth == size){
-            //최소성 검사 
-            for(HashSet<Integer> key : candidateKey){
-                if(set.containsAll(key)) 
-                    return;
+    private  void combination(int start, int size, Set<Integer> currentCombination){
+        //조합이 완성되면
+        if(currentCombination.size() == size){
+            if(isMinimal(currentCombination)){
+                if(isUnique(currentCombination)){
+                    candidateKeys.add(new HashSet<>(currentCombination));
+                }
             }
-            //유일성 검사
-            if(!isUnique(set))
-                return;
-            
-            candidateKey.add(set);
-            answer++;
-            return;
+           return;
         }
         
-        for(int i=idx; i<m;i++){
-            HashSet<Integer> newSet = new HashSet<>(set);
-            newSet.add(i);
-            combination(idx+1,size,depth+1,newSet);
+        //재귀 호출
+        for(int i=start; i< col;i++){
+            currentCombination.add(i);
+            combination(i+1,size,currentCombination);
+            currentCombination.remove(i); //재귀 후 원상복구
+            
         }
     }
-    public boolean isUnique(HashSet<Integer> set){
-        List<String> list = new ArrayList<>();
+    
+    //최소성 검사
+    private boolean isMinimal(Set<Integer> combination){
+        for(Set<Integer> key : candidateKeys){
+            //기존 후보키가 현재 조합의 부분 집합이라면 최소성 만족X
+            if(combination.containsAll(key)) return false;
+        }
+        return true;
+    }
+    
+    //유일성 검사
+    private  boolean isUnique(Set<Integer> combination){
+        Set<String> tupleSet = new HashSet<>();
         //만들어진 컬럼 조합의 튜플 값들이 중복되는지 검사
-        for(int i=0; i<n;i++){
+        for(int r=0; r < row ; r++){
             StringBuilder sb = new StringBuilder();
-            for(int idx :set){
-                sb.append(relationCopy[i][idx]);
+            for(int c :combination){
+                sb.append(relation[r][c]).append(",");
             }
-            if(!list.contains(sb.toString())) list.add(sb.toString());
-            else return false;
+            if(!tupleSet.add(sb.toString())) 
+                return false;
         }
         return true;
     }
